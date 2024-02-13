@@ -51,6 +51,7 @@
         <img src="/img/logo.png" alt="Web Crawler by Ezequiel Pereira" width="300" height="135">
     </picture>
     <h2>By <a href="https://ezequielhpp.net" rel="opener" target="_blank">Ezequiel Pereira</a></h2>
+    <h3>View the <a href="https://github.com/EzequielHPP/web-crawler" rel="opener" target="_blank">source code</a></h3>
 @endsection
 
 @section('main')

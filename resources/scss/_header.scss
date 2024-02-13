@@ -21,6 +21,24 @@ header.main {
         }
     }
 
+    h3 {
+        font-size: .7em;
+        font-weight: bold;
+        color: #629125;
+        text-align: center;
+
+        a {
+            text-decoration: none;
+            color: #629125;
+            transition: color 0.3s;
+            font-weight: bold;
+
+            &:hover {
+                color: #395712;
+            }
+        }
+    }
+
     picture.logo {
         display: flex;
         flex-direction: column;

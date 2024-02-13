@@ -17,15 +17,17 @@ class JsonModel
 
     public function __construct()
     {
-
-        // get the file from storage folder 'database/' . $this->table . '.json'
         $table = (Storage::disk('database')->exists($this->table . '.json')) ? Storage::disk('database')->get($this->table . '.json') : null;
 
         if(!$table) {
-            throw new \Exception('Table database/' . $this->table . '.json not found');
+            $table = [
+                'tableStructure' => $this->schema,
+                'tableData' => []
+            ];
+            Storage::disk('database')->put($this->table . '.json', json_encode($table));
         }
 
-        $table = json_decode($table, true);
+        $table = is_string($table) ? json_decode($table, true) : $table;
         if(empty($this->schema)) {
             $this->schema = $table['tableStructure'];
         }
