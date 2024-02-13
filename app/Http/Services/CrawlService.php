@@ -16,6 +16,17 @@ class CrawlService
     private string $protocol;
 
     /**
+     * Check if the given URL is valid
+     *
+     * @param string $url
+     * @return bool
+     */
+    final public function isValidUrl(string $url): bool
+    {
+        return filter_var($url, FILTER_VALIDATE_URL) !== false;
+    }
+
+    /**
      * Check if the given URL can be crawled given the /robots.txt file
      *
      */

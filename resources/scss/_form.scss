@@ -1,3 +1,11 @@
+@keyframes jiggle {
+    0% { transform: translateX(0); }
+    25% { transform: translateX(-5px); }
+    50% { transform: translateX(5px); }
+    75% { transform: translateX(-5px); }
+    100% { transform: translateX(0); }
+}
+
 #crawler {
     width: 100%;
     padding: 20px;
@@ -15,6 +23,11 @@
         border: 1px solid #ccc;
         border-radius: 5px;
         font-size: 1em;
+
+        &.error {
+            border-color: #ff4d4d;
+            animation: jiggle 0.3s ease;
+        }
     }
 
     button {

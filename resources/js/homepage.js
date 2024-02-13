@@ -157,7 +157,7 @@ const heartbeatResults = () => {
         .then(data => {
             if (data.status === 'done') {
                 haltCrawler('Crawl finished');
-            } else if(data.status === 'error') {
+            } else if (data.status === 'error') {
                 haltCrawler(data.message);
             } else {
                 let alreadyAdded = [];
@@ -207,7 +207,7 @@ const updateStatuses = (queued = 0, inProgress = 0) => {
 }
 
 const haltCrawler = (message) => {
-    if(!stopped) {
+    if (!stopped) {
         stopped = true;
         const div = document.createElement('div');
         div.classList.add('crawl-finished');
@@ -227,6 +227,16 @@ const haltCrawler = (message) => {
 let statusInterval = null;
 let resultsTimeout = null;
 
+const isValidUrl = (url) => {
+    const urlPattern = new RegExp('^(https?:\\/\\/)' +
+        '((([a-z\\d]([a-z\\d-]*[a-z\\d])*)\\.)+[a-z]{2,}|' +
+        '((?!\\d+\\.\\d+\\.\\d+\\.\\d+)([a-zA-Z\\d-]+\\.){1,}[a-zA-Z]{2,}))' +
+        '(\\:\\d+)?(\\/[-a-z\\d%_.~+]*)*' +
+        '(\\?[;&a-z\\d%_.~+=-]*)?' +
+        '(\\#[-a-z\\d_]*)?$', 'i');
+    return urlPattern.test(url);
+}
+
 // get the form #crawler
 document.querySelector('#crawler').addEventListener('submit', function (e) {
     e.preventDefault();
@@ -239,6 +249,16 @@ document.querySelector('#crawler').addEventListener('submit', function (e) {
             'event_label': url
         });
     }
+
+    // check if is a valid url
+    document.querySelector('#url').classList.remove('error');
+    if (!isValidUrl(url)) {
+        setTimeout(() => {
+            document.querySelector('#url').classList.add('error');
+        },250);
+        return;
+    }
+
     // get the csrf token
     let token = document.querySelector('input[name="_token"]').value;
     // get the result div
@@ -292,10 +312,11 @@ document.querySelector('#crawler').addEventListener('submit', function (e) {
             console.error('Error:', error);
             haltCrawler(error);
         });
+
 });
 
 const realUser = () => {
-    if(!appended) {
+    if (!appended) {
         appended = true;
         // create the script
         const script = document.createElement('script');
@@ -333,7 +354,7 @@ document.addEventListener('scroll', function () {
     }
 
     clearTimeout(scrollTimer);
-    if(!appended) {
+    if (!appended) {
         scrollTimer = setTimeout(realUser, 200);
     }
 });

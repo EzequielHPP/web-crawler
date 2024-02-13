@@ -22,6 +22,13 @@ class ApiController extends Controller
         $service = new CrawlService();
         $service->deleteOldEntries();
 
+        if(!$service->isValidUrl($url)){
+            return response()->json([
+                'status' => 'error',
+                'message' => 'Invalid URL'
+            ]);
+        }
+
         if($service->canCrawl($url) === false){
             return response()->json([
                 'status' => 'error',
