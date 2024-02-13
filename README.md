@@ -1,6 +1,6 @@
 # Web Crawler Project
 
-![Web Crawler Logo](https://web-crawler.ezequielhpp.net/img/logo.webp)
+![Web Crawler Logo](https://web-crawler.ezequielhpp.net/img/logo.png)
 
 Welcome to the Web Crawler Project! This project serves as a showcase of my capabilities in both Backend and Front End development.
 
