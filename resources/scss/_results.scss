@@ -1,0 +1,204 @@
+#results {
+    width: 100%;
+    padding: 20px;
+    display: none;
+
+    &.active {
+        display: block;
+        margin-bottom: 10px;
+    }
+
+    .holder {
+        display: flex;
+        width: 100%;
+        flex-direction: column;
+        gap: 40px;
+        margin-top: 20px;
+        padding: 20px;
+        border: 1px solid #ccc;
+        border-radius: 5px;
+        background-color: #f9f9f9;
+        box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        position: relative;
+        max-width: 1024px;
+
+        &:after {
+            content: "";
+            display: block;
+            width: 100%;
+            height: 5px;
+            position: absolute;
+            bottom: -20px;
+            left: 0;
+            background-image: linear-gradient(-45deg, #4d79ff, #8ac33f, #ffcc00, #ff4d4d);
+            background-size: 200% 400%;
+            animation: color-change 3s ease infinite;
+        }
+
+        .main-row,
+        .sub-row {
+            display: flex;
+            gap: 40px;
+            align-items: flex-start;
+            position: relative;
+
+            &:after {
+                content: "";
+                display: block;
+                width: 100%;
+                height: 1px;
+                background-color: #777777;
+                position: absolute;
+                bottom: -20px;
+                left: 0;
+            }
+
+            &:last-child:after {
+                display: none;
+            }
+
+            a {
+                display: grid;
+                text-decoration: none;
+                position: relative;
+                flex-direction: row;
+                flex-wrap: nowrap;
+                align-content: stretch;
+                align-items: start;
+                justify-items: start;
+                grid-template-areas: " header " " description ";
+                grid-template-columns: auto;
+                width: 100%;
+                column-gap: 20px;
+
+                header.row-header {
+                    grid-area: header;
+                    font-size: 1.2em;
+                    font-weight: bold;
+                    margin-bottom: 5px;
+                    display: grid;
+                    grid-template-columns: 15px auto;
+                    gap: 20px;
+                    align-items: start;
+                    justify-content: start;
+                    justify-items: start;
+                    align-content: center;
+
+                    img.favicon {
+                        width: 15px;
+                        height: 15px;
+                        border-radius: 5px;
+                        object-fit: cover;
+                        display: block;
+                        margin-top: 9px;
+                    }
+
+                    .title-div {
+                        display: flex;
+                        flex-direction: column;
+                        gap: 5px;
+
+                        h3 {
+                            font-size: 1.2em;
+                            font-weight: bold;
+                            margin: 0;
+                        }
+
+                        p {
+                            font-size: 0.6em;
+                            color: #666;
+                            margin: 0 0 0 -35px;
+
+                            span {
+                                font-weight: bold;
+                                color: #333;
+
+                                &:after {
+                                    content: " > ";
+                                    display: inline-block;
+                                    margin: 0 5px;
+
+                                }
+
+                                &:last-child:after {
+                                    content: "";
+                                }
+                            }
+                        }
+                    }
+                }
+
+                .description-div {
+                    grid-area: description;
+                    display: flex;
+                    flex-direction: column;
+                    gap: 5px;
+                    font-size: 0.9em;
+                    color: #666;
+
+                    h4,
+                    p {
+                        margin: 0;
+                        display: -webkit-box;
+                        -webkit-line-clamp: 2;
+                        -webkit-box-orient: vertical;
+                        overflow: hidden;
+                        text-overflow: ellipsis;
+                    }
+
+                    h4 {
+                        font-size: 1em;
+                        font-weight: bold;
+                    }
+                }
+
+                .image-div {
+                    display: block;
+                    grid-area: image;
+                    position: relative;
+                    width: 70px;
+                    height: 70px;
+                    overflow: hidden;
+                    border-radius: 5px;
+                    background-color: #f9f9f9;
+                    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+
+                    img {
+                        width: 100%;
+                        height: 100%;
+                        object-fit: cover;
+                    }
+                }
+
+                @media (min-width: 768px) {
+                    .image-div {
+                        width: 150px;
+                        height: 150px;
+                    }
+                }
+            }
+
+
+            &.has-image a {
+                grid-template-areas: " header header " " description image ";
+                grid-template-columns: auto 70px;
+
+                @media (min-width: 768px) {
+                    grid-template-areas: " header image " " description image ";
+                    grid-template-columns: auto 150px;
+                }
+            }
+        }
+
+        .crawl-finished {
+            text-align: center;
+            font-size: 1.2rem;
+            color: #b9b9b9;
+        }
+    }
+
+
+    &.stopped .holder:after {
+        display: none;
+    }
+}

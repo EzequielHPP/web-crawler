@@ -1,0 +1,71 @@
+#crawler {
+    width: 100%;
+    padding: 20px;
+    border-radius: 5px;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+
+    &.hidden {
+        display: none;
+    }
+
+    input {
+        padding: 10px;
+        border: 1px solid #ccc;
+        border-radius: 5px;
+        font-size: 1em;
+    }
+
+    button {
+        padding: 10px;
+        border: none;
+        border-radius: 5px;
+        background-color: #4d79ff;
+        color: white;
+        font-size: 1em;
+        font-weight: bold;
+        cursor: pointer;
+        transition: background-color 0.3s;
+
+        &:hover {
+            background-color: #668cff;
+        }
+    }
+}
+
+#running {
+    padding: 20px;
+    border-radius: 5px;
+    display: none;
+    flex-direction: column;
+    gap: 10px;
+
+    &.active {
+        display: flex;
+    }
+
+    button#stop {
+        padding: 10px;
+        border: none;
+        border-radius: 5px;
+        background-color: #ff4d4d;
+        color: white;
+        font-size: 1em;
+        font-weight: bold;
+        cursor: pointer;
+        transition: background-color 0.3s;
+
+        &:hover {
+            background-color: #ff6666;
+        }
+
+        &.fixed {
+            position: fixed;
+            bottom: 180px;
+            right: -26px;
+            z-index: 10;
+            transform: rotate(-90deg);
+        }
+    }
+}

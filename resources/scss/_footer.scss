@@ -1,0 +1,32 @@
+footer {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+    padding: 20px;
+    width: 80%;
+    margin: 0 auto;
+    max-width: 1024px;
+    flex-wrap: nowrap;
+    align-content: center;
+    align-items: center;
+    justify-content: flex-start;
+    border-top: 1px solid #ccc;
+
+    p {
+        font-size: 0.8em;
+        color: #666;
+        text-align: center;
+        margin: 0;
+    }
+
+    a {
+        font-size: 1em;
+        color: #4d79ff;
+        text-decoration: none;
+        transition: color 0.3s;
+
+        &:hover {
+            color: #668cff;
+        }
+    }
+}
