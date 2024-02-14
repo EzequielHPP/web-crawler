@@ -1,9 +1,11 @@
 FROM ubuntu:latest
 LABEL authors="Ezequiel Pereira <info@ezequielhpp.net>"
 
+WORKDIR /var/www/html
+
 RUN ln -snf /usr/share/zoneinfo/UTC /etc/localtime && echo UTC > /etc/timezone
 
-# install nginx php8.1 and npm
+# install nginx php8.3 and npm
 RUN apt-get update && apt-get install -y nginx php8.1 php8.1-fpm php8.1-mysql php8.1-mbstring php8.1-xml php8.1-curl php8.1-zip php8.1-gd php8.1-bcmath php8.1-intl php8.1-redis php8.1-imagick php8.1-xdebug wget
 
 # install the latest version of nodejs and npm
@@ -34,7 +36,6 @@ RUN echo "* * * * * root /usr/local/bin/php /var/www/html/artisan schedule:run >
 RUN chmod 0644 /etc/cron.d/laravel-scheduler
 
 # associate group www-data as 1000
-RUN usermod -u 1000 www-data
 RUN groupmod -g 1000 www-data
 
 # copy nginx config

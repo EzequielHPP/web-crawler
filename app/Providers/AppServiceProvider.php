@@ -31,7 +31,8 @@ class AppServiceProvider extends ServiceProvider
         if (php_sapi_name() === 'cli') {
             return;
         }
-        if(env('APP_ENV', 'production') !== 'local') {
+
+        if(config('app.env') !== 'local') {
             URL::forceScheme('https');
         }
     }
