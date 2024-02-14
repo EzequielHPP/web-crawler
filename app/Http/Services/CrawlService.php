@@ -32,9 +32,7 @@ class CrawlService
      */
     final public function canCrawl(string $url): bool
     {
-        $preventionRule = $this->getRobotsPreventionRule($url);
-
-        return $preventionRule === null;
+        return $this->getRobotsPreventionRule($url) === null;
     }
 
     /**
@@ -47,14 +45,14 @@ class CrawlService
     {
 
         $urlParsed = parse_url($url);
-        $domain = $urlParsed['host'];
         $path = $urlParsed['path'] ?? '/';
-        $robotsUrl = $urlParsed['scheme'] . '://' . $domain . '/robots.txt';
+        $robotsUrl = $urlParsed['scheme'] . '://' . $urlParsed['host'] . '/robots.txt';
         $this->crawl($robotsUrl);
         if (empty($this->data)) {
             return null;
         }
 
+        // Group the disallowed paths by user agent
         $lines = explode("\n", $this->data);
         $userAgents = [];
         $currentUserAgent = '';
@@ -67,6 +65,7 @@ class CrawlService
             }
         }
 
+        // We only care about the * and Googlebot user agents
         $agents = ['*', 'Googlebot'];
         foreach ($agents as $agent) {
             if (isset($userAgents[$agent])) {
@@ -180,7 +179,6 @@ class CrawlService
             'type' => $type
         ];
 
-        // save the data to the database
         (new Crawls())->create($newEntry);
 
         return array_merge($newEntry, [
@@ -195,7 +193,6 @@ class CrawlService
      */
     private function getName(): string
     {
-        // get the og:site_name if it exists
         $outputName = '';
         $siteName = $this->dom->getElementsByTagName('meta');
         foreach ($siteName as $meta) {
@@ -215,6 +212,8 @@ class CrawlService
 
     /**
      * Get the title of the page
+     * If there is no title, then we need to use the domain
+     * and truncate it to 200 characters
      *
      * @return string
      */
@@ -230,6 +229,8 @@ class CrawlService
 
     /**
      * Get the description of the page
+     * If there is no description, then we need to use the body
+     * and truncate it to 200 characters
      *
      * @return string
      */
@@ -284,7 +285,8 @@ class CrawlService
     }
 
     /**
-     * Get the image of the page
+     * Get the og:image of the page
+     * If there is no image, then we use the first image on the page
      *
      * @return string
      */
