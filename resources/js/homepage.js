@@ -159,6 +159,10 @@ const heartbeatResults = () => {
                 haltCrawler('Crawl finished');
             } else if (data.status === 'error') {
                 haltCrawler(data.message);
+            } else if(stopped){
+                // do nothing and stop the interval
+                clearInterval(statusInterval);
+                clearInterval(resultsTimeout);
             } else {
                 let alreadyAdded = [];
                 // check if the bottom of #results.active is in view
@@ -221,6 +225,15 @@ const haltCrawler = (message) => {
 
         clearInterval(statusInterval);
         clearTimeout(resultsTimeout);
+        document.title = originalTitle;
+
+        if (typeof gtag === 'function') {
+            gtag('event', 'crawl_finished', {
+                'event_category': 'crawl_finished',
+                'event_label': message,
+                'value': message
+            });
+        }
     }
 }
 
@@ -237,18 +250,13 @@ const isValidUrl = (url) => {
     return urlPattern.test(url);
 }
 
+let originalTitle = document.title;
+
 // get the form #crawler
 document.querySelector('#crawler').addEventListener('submit', function (e) {
     e.preventDefault();
     // get the input value
     let url = document.querySelector('#url').value;
-    // fi gtag is available, send the event
-    if (typeof gtag === 'function') {
-        gtag('event', 'crawl', {
-            'event_category': 'crawl',
-            'event_label': url
-        });
-    }
 
     // check if is a valid url
     document.querySelector('#url').classList.remove('error');
@@ -257,6 +265,18 @@ document.querySelector('#crawler').addEventListener('submit', function (e) {
             document.querySelector('#url').classList.add('error');
         },250);
         return;
+    }
+
+    // change page title
+    document.title = 'Crawling ' + url + ' | ' + originalTitle;
+
+    // if gtag is available, send the event
+    if (typeof gtag === 'function') {
+        gtag('event', 'crawl', {
+            'event_category': 'crawl',
+            'event_label': url,
+            'value': url
+        });
     }
 
     // get the csrf token

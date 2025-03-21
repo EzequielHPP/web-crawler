@@ -31,7 +31,7 @@ class RunCrawlSchedule extends Command
         $url = (new CrawlSchedules())->where('status', 'scheduled')->first();
         if ($url) {
             $this->info('Running the crawl command on ' . $url['url']);
-            (new CrawlSchedules())->update($url['id'],['status' => 'running']);
+            (new CrawlSchedules())->find($url['id'])->update(['status' => 'running']);
 
             $service = new CrawlService();
             $service->getData($url['url']);

@@ -53,8 +53,15 @@ class ApiController extends Controller
         } catch (\Throwable $e) {
             $response = [
                 'status' => 'error',
-                'message' => 'An internal error occurred. Please try again later.'
+                'message' => 'An internal error occurred. Please try again later.',
+                'debug' => env('APP_DEBUG')
             ];
+            if(config('app.debug')) {
+                $response['debug'] = [
+                    'message' => $e->getMessage(),
+                    'trace' => $e->getTraceAsString()
+                ];
+            }
         }
 
         end:
@@ -83,6 +90,12 @@ class ApiController extends Controller
                 'status' => 'error',
                 'message' => 'An internal error occurred. Please try again later.'
             ];
+            if(config('app.debug')) {
+                $response['debug'] = [
+                    'message' => $e->getMessage(),
+                    'trace' => $e->getTraceAsString()
+                ];
+            }
         }
         return response()->json($response);
     }
@@ -104,11 +117,10 @@ class ApiController extends Controller
 
             $domain = $keyResult['domain'];
 
-            $results = (new Crawls())->where('domain', $domain)->all();
-            // order collection by created_at
-            $results = collect($results)->sortByDesc('created_at')->values()->all();
-            // limit to 20
-            $results = array_slice($results, 0, 20);
+            $results = (new Crawls())->where('domain', $domain)
+                ->orderBy('created_at', 'desc')
+                ->limit(20)
+                ->get();
 
             $status = 'success';
 
@@ -121,7 +133,7 @@ class ApiController extends Controller
             }
 
             foreach ($results as $tmpKey => $result) {
-                $results[$tmpKey] = $service->formatResultToApi($result);
+                $results[$tmpKey] = $service->formatResultToApi($result->toArray());
             }
 
             $service->runCrawlSchedule();
@@ -135,6 +147,12 @@ class ApiController extends Controller
                 'status' => 'error',
                 'message' => 'An internal error occurred. Please try again later.'
             ];
+            if(config('app.debug')) {
+                $response['debug'] = [
+                    'message' => $e->getMessage(),
+                    'trace' => $e->getTraceAsString()
+                ];
+            }
         }
 
         return response()->json($response);
@@ -164,6 +182,12 @@ class ApiController extends Controller
                 'status' => 'error',
                 'message' => 'An internal error occurred. Please try again later.'
             ];
+            if(config('app.debug')) {
+                $response['debug'] = [
+                    'message' => $e->getMessage(),
+                    'trace' => $e->getTraceAsString()
+                ];
+            }
         }
 
         return response()->json($response);

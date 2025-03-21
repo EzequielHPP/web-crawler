@@ -3,12 +3,13 @@
 namespace App\Models;
 
 
-class Crawls extends JsonModel
-{
-    protected string $table = 'crawl_entries';
+use Illuminate\Database\Eloquent\Model;
 
-    protected array $schema = [
-        "id",
+class Crawls extends Model
+{
+    protected $table = 'crawl_entries';
+
+    protected $fillable=[
         "key",
         "name",
         "domain",

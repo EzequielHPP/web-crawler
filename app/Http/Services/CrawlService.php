@@ -149,8 +149,9 @@ class CrawlService
 
         // check if we already have the data for this URL
         $existingEntry = (new Crawls())->where('key', $key)->first();
-        if ($existingEntry) {
-            return $existingEntry;
+
+        if ($existingEntry !== null) {
+            return $existingEntry->toArray();
         }
 
         // extract if any url parameters
@@ -172,18 +173,22 @@ class CrawlService
             'path' => json_encode(array_values($path)),
             'status' => $this->data ? 'success' : 'failed',
             'title' => trim($this->getTitle()),
+            'type' => $type,
             'description' => trim($this->getDescription()),
             'favicon' => trim($this->getFavicon()),
             'image' => trim($this->getImage()),
-            'keywords' => $this->getKeywords(),
-            'type' => $type
+            'keywords' => $this->getKeywords()
         ];
 
-        (new Crawls())->create($newEntry);
+        $newCrawl = new Crawls();
+        foreach ($newEntry as $key => $value){
+            $newCrawl->$key = $value;
+        }
+        $newCrawl->save();
 
-        return array_merge($newEntry, [
-            'page_size' => strlen($this->data) . ' bytes'
-        ]);
+        $newEntry['page_size'] = strlen($this->data) . ' bytes';
+
+        return $newEntry;
     }
 
     /**
@@ -373,8 +378,8 @@ class CrawlService
             $outputKeywords = rtrim($outputKeywords, ', ');
         }
 
-
-        return $outputKeywords;
+        $outputKeywords = trim($outputKeywords,', ');
+        return trim($outputKeywords,', ');
     }
 
     /**
@@ -545,10 +550,10 @@ class CrawlService
      */
     final public function deleteOldEntries(): void
     {
-        $oldEntries = (new Crawls())->where('created_at', '<', now()->subMinutes(15))->all();
+        $oldEntries = (new Crawls())->where('created_at', '<', now()->subMinutes(15))->get();
 
         foreach ($oldEntries as $entry) {
-            (new Crawls())->delete($entry['id']);
+            $entry->delete();
         }
     }
 }
